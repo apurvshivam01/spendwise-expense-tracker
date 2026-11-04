@@ -1,0 +1,17 @@
+{
+  "name": "spendwise",
+  "version": "1.0.0",
+  "description": "A complete, production-grade personal finance and smart expense tracker web application built with **React (Vite)**, **Tailwind CSS**, **Recharts**, **Lucide React**, **Node.js**, **Express.js**, **JWT + bcrypt**, and **MongoDB (Mongoose)**.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@octokit/rest": "^22.0.1",
+    "isomorphic-git": "^1.44.10"
+  }
+}
