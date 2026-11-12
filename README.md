@@ -8,11 +8,11 @@ Inspired by premium SaaS dashboards like **Stripe** and **Linear**, SpendWise pr
 
 ---
 
-## 🌐 Live Frontend
+## 🌐 Live Demo
 
-Frontend URL: [Open Live Website](https://trackwithspendwise.vercel.app)
+[Open SpendWise](https://trackwithspendwise.vercel.app)
 
-*Local Development URL: [http://localhost:5173](http://localhost:5173)*
+*Local Development Server: [http://localhost:5173](http://localhost:5173)*
 
 ---
 
