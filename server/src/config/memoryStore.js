@@ -1,13 +1,29 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import bcrypt from 'bcryptjs';
 
-const DATA_DIR = path.resolve('data');
-const DATA_FILE = path.join(DATA_DIR, 'spendwise_db.json');
+let DATA_DIR = path.resolve('data');
+let DATA_FILE = path.join(DATA_DIR, 'spendwise_db.json');
 
-// Ensure data directory exists
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+try {
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    DATA_DIR = path.join(os.tmpdir(), 'spendwise_data');
+    DATA_FILE = path.join(DATA_DIR, 'spendwise_db.json');
+  }
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+} catch (e) {
+  try {
+    DATA_DIR = path.join(os.tmpdir(), 'spendwise_data');
+    DATA_FILE = path.join(DATA_DIR, 'spendwise_db.json');
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+  } catch (err) {
+    console.warn('[MemoryStore] Operating in pure in-memory mode:', err.message);
+  }
 }
 
 // In-memory state

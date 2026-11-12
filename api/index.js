@@ -36,18 +36,30 @@ app.use(express.urlencoded({ extended: true }));
 
 connectDB().catch(console.error);
 
-app.get('/api/health', (req, res) => {
+const healthHandler = (req, res) => {
   res.json({
     status: 'healthy',
     service: 'SpendWise API Server',
+    environment: process.env.NODE_ENV || 'production',
     timestamp: new Date().toISOString(),
   });
-});
+};
 
+app.get('/api/health', healthHandler);
+app.get('/health', healthHandler);
+
+// Mount routes with /api prefix
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets', budgetRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/notifications', notificationRoutes);
+
+// Also mount without /api prefix in case rewrite strips it
+app.use('/auth', authRoutes);
+app.use('/transactions', transactionRoutes);
+app.use('/budgets', budgetRoutes);
+app.use('/analytics', analyticsRoutes);
+app.use('/notifications', notificationRoutes);
 
 export default app;

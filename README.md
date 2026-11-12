@@ -208,6 +208,6 @@ npm run dev
 ## 👨‍💻 Author
 
 **Apurv Sharma**  
-- GitHub: [@apurv](https://github.com)  
-- Project Repository: [spendwise-expense-tracker](https://github.com)  
+- GitHub: [@apurvshivam01](https://github.com/apurvshivam01)  
+- Project Repository: [spendwise-expense-tracker](https://github.com/apurvshivam01/spendwise-expense-tracker)  
 - License: MIT License © 2026 SpendWise

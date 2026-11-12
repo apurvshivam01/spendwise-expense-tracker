@@ -3,19 +3,31 @@ import mongoose from 'mongoose';
 export let isMongooseConnected = false;
 
 export const connectDB = async () => {
-  const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/spendwise';
+  const uri = process.env.MONGODB_URI;
+
+  if (!uri) {
+    if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+      console.log(
+        '[MongoDB] No MONGODB_URI set. Activated SpendWise Zero-Config High-Performance In-Memory Engine.'
+      );
+      isMongooseConnected = false;
+      return;
+    }
+  }
+
+  const targetUri = uri || 'mongodb://127.0.0.1:27017/spendwise';
 
   try {
-    // Attempt standard connection with 2500ms server selection timeout
-    await mongoose.connect(uri, {
+    // Attempt connection with 2500ms server selection timeout
+    await mongoose.connect(targetUri, {
       serverSelectionTimeoutMS: 2500,
     });
     isMongooseConnected = true;
-    console.log(`[MongoDB] Connected successfully to external instance: ${uri}`);
+    console.log(`[MongoDB] Connected successfully to external instance: ${targetUri.replace(/\/\/.*@/, '//***:***@')}`);
   } catch (err) {
     isMongooseConnected = false;
     console.log(
-      `[MongoDB] No external MongoDB daemon found at ${uri}. Activated SpendWise Zero-Config High-Performance In-Memory Engine with JSON persistence.`
+      `[MongoDB] No external MongoDB daemon found at ${targetUri.replace(/\/\/.*@/, '//***:***@')}. Activated SpendWise Zero-Config High-Performance In-Memory Engine with JSON persistence.`
     );
   }
 
