@@ -1,0 +1,53 @@
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import authRoutes from '../server/src/routes/authRoutes.js';
+import transactionRoutes from '../server/src/routes/transactionRoutes.js';
+import budgetRoutes from '../server/src/routes/budgetRoutes.js';
+import analyticsRoutes from '../server/src/routes/analyticsRoutes.js';
+import notificationRoutes from '../server/src/routes/notificationRoutes.js';
+import { connectDB } from '../server/src/config/db.js';
+
+dotenv.config();
+
+const app = express();
+
+const allowedOrigins = [
+  'https://trackwithspendwise.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+        return callback(null, true);
+      }
+      return callback(new Error(`Blocked by CORS policy: origin ${origin} not allowed`));
+    },
+    credentials: true,
+  })
+);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+connectDB().catch(console.error);
+
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    service: 'SpendWise API Server',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.use('/api/auth', authRoutes);
+app.use('/api/transactions', transactionRoutes);
+app.use('/api/budgets', budgetRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/notifications', notificationRoutes);
+
+export default app;
